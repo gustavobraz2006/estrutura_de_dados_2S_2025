@@ -1,0 +1,4 @@
+12 1200.00 Andre
+34 800.00 Bruno
+73 -20000 Carlos 
+58 100 Davi Eduardo
