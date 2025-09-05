@@ -1,0 +1,25 @@
+tabuada do 7
+O resultado de 7 x 0 eh: 0
+O resultado de 7 x 1 eh: 7
+O resultado de 7 x 2 eh: 14
+O resultado de 7 x 3 eh: 21
+O resultado de 7 x 4 eh: 28
+O resultado de 7 x 5 eh: 35
+O resultado de 7 x 6 eh: 42
+O resultado de 7 x 7 eh: 49
+O resultado de 7 x 8 eh: 56
+O resultado de 7 x 9 eh: 63
+O resultado de 7 x 10 eh: 70
+tabuada do 9
+
+O resultado de 9 x 0 eh: 0
+O resultado de 9 x 1 eh: 9
+O resultado de 9 x 2 eh: 18
+O resultado de 9 x 3 eh: 27
+O resultado de 9 x 4 eh: 36
+O resultado de 9 x 5 eh: 45
+O resultado de 9 x 6 eh: 54
+O resultado de 9 x 7 eh: 63
+O resultado de 9 x 8 eh: 72
+O resultado de 9 x 9 eh: 81
+O resultado de 9 x 10 eh: 90
