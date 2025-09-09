@@ -11,20 +11,23 @@ Processos * LerDadosProcessos(char * NomeArquivo) {
         exit(1);
     }
 
-    char buffer[1024];
+    char buffer[2048];
     fgets(buffer, sizeof(buffer), fp); // pula cabeçalho
 
     Processos * P = malloc(100000 * sizeof(Processos));
+    if (P == NULL) {
+        printf("ERRO: memória insuficiente\n");
+        exit(1);
+    }
+
     int i = 0;
-
-    while (!feof(fp)) {
-
+    while (fgets(buffer, sizeof(buffer), fp)) {
         // Variáveis temporárias para campos numéricos que podem estar vazios
-        char tmp_cnm1[10], tmp_primeirasentm1[10], tmp_baixm1[10], tmp_decm1[10];
-        char tmp_mpum1[10], tmp_julgadom1[10], tmp_desm1[10], tmp_susm1[10];
+        char tmp_cnm1[10] = "", tmp_primeirasentm1[10] = "", tmp_baixm1[10] = "", tmp_decm1[10] = "";
+        char tmp_mpum1[10] = "", tmp_julgadom1[10] = "", tmp_desm1[10] = "", tmp_susm1[10] = "";
 
-        int n = fscanf(fp,
-            "%d;%49[^;];%9[^;];%99[^;];%49[^;];%9[^;];%d;%d;%d;%10[^;];%d;%d;%d;%d;%d;%d;%d;%d;%10[^;];%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];%9[^;]\n",
+        int n = sscanf(buffer,
+            "%d;%49[^;];%9[^;];%99[^;];%49[^;];%9[^;];%d;%d;%d;%10[^;];%d;%d;%d;%d;%d;%d;%d;%d;%10[^;];%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];%9[^;];%9[^;]",
             &P[i].id_processo,
             P[i].numero_sigilo,
             P[i].sigla_grau,
@@ -54,8 +57,7 @@ Processos * LerDadosProcessos(char * NomeArquivo) {
             tmp_susm1
         );
 
-        if (n == EOF) break;
-        if (n != 26) continue; // ignora linhas inválidas
+        if (n < 19) continue; // mínimo de campos obrigatórios
 
         // Converter campos numéricos temporários para int, trata vazio como 0
         P[i].cnm1 = strlen(tmp_cnm1) > 0 ? atoi(tmp_cnm1) : 0;
@@ -68,6 +70,7 @@ Processos * LerDadosProcessos(char * NomeArquivo) {
         P[i].susm1 = strlen(tmp_susm1) > 0 ? atoi(tmp_susm1) : 0;
 
         i++;
+        if (i >= 99999) break; // evita estourar limite
     }
 
     P[i].id_processo = 0; // marca final do vetor
@@ -85,7 +88,8 @@ int getidprocessoMaisAntigo (Processos * P) {
     int i = 0;
     int idxMaisAntigo = 0;
     while (P[i].id_processo != 0) {
-        if (strcmp(P[i].dt_recebimento, P[idxMaisAntigo].dt_recebimento) < 0) {
+        if (strlen(P[i].dt_recebimento) > 0 && 
+            strcmp(P[i].dt_recebimento, P[idxMaisAntigo].dt_recebimento) < 0) {
             idxMaisAntigo = i;
         }
         i++;
@@ -148,8 +152,8 @@ int getinfancia (Processos * P) {
 }
 
 int getdiasEntreDatas(char data1[], char data2[]) {
-    int dia1, mes1, ano1;
-    int dia2, mes2, ano2;
+    int dia1 = 0, mes1 = 0, ano1 = 0;
+    int dia2 = 0, mes2 = 0, ano2 = 0;
     sscanf(data1, "%d-%d-%d", &ano1, &mes1, &dia1);
     sscanf(data2, "%d-%d-%d", &ano2, &mes2, &dia2);
     int dias1 = ano1 * 365 + mes1 * 30 + dia1;
@@ -163,11 +167,11 @@ float getcumprimentoMeta1(Processos * P) {
     for (int i = 0; i < totalProcessos; i++) {
         if (strlen(P[i].dt_resolvido) > 0) processosResolvidos++;
     }
-    if (totalProcessos == 0) return 0.0;
-    return (float)processosResolvidos / totalProcessos * 100.0;
+    if (totalProcessos == 0) return 0.0f;
+    return (float)processosResolvidos / totalProcessos * 100.0f;
 }
 
-Processos * gerarCSVMeta1julgados(Processos * P, const char * NomeArquivoSaida) {
+Processos * gerarCSVMeta1julgados(Processos * P, const char * NomeArquivoSaida){
     FILE * fp = fopen(NomeArquivoSaida, "w");
     if (fp == NULL) {
         printf("ERRO: o arquivo de saída não pode ser criado\n");
