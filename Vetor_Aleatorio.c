@@ -6,7 +6,7 @@ int main() {
 int array[ARRAY_SIZE];
 srand(time(NULL)); // Inicializa o gerador de números aleatórios
 for (int i = 0; i < ARRAY_SIZE; i++) array[i] = rand(); // Preenchendo o vetor
-for (int i = 0; i < 10; i++) printf("%d ", array[i]);
+for (int i = 0; i < ARRAY_SIZE; i++) printf("%d ", array[i]);
 
 return 0;
 }
